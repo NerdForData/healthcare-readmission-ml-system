@@ -86,3 +86,10 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     train_model(args.data_path, args.model_type)
+
+# We selected Gradient Boosting because it improved both ROC-AUC and precision–recall performance, which is critical under class imbalance in healthcare readmission prediction.
+
+#| Model               | ROC-AUC    | PR-AUC     |
+#| ------------------- | ---------- | ---------- |
+#| Logistic Regression | 0.6463     | 0.2047     |
+#| Gradient Boosting   | 0.6771.    | 0.2306     |
