@@ -40,7 +40,6 @@ healthcare-readmission-ml-system/
 │   ├── train.py              # Model training script
 │   ├── evaluate.py           # Clinical threshold analysis
 │   ├── finalize_model.py     # Final model creation
-│   └── app.py                # Flask API for predictions
 └── artifacts/
 ```
 
@@ -135,15 +134,6 @@ This creates:
 - `models/final_readmission_pipeline.joblib` - Production-ready model
 - `models/clinical_threshold.json` - Clinical threshold configuration
 
-### 5. Deploy Prediction API (Optional)
-
-Start the Flask API for real-time predictions:
-```bash
-python src/app.py
-```
-
-The API will be available at `http://localhost:5000`
-
 ## 🧪 Model Performance
 
 ### Gradient Boosting Classifier (Recommended)
@@ -194,11 +184,6 @@ This high-recall approach ensures that most patients at risk of readmission are 
 - Saves clinical threshold configuration
 - Generates deployment artifacts
 
-### `src/app.py`
-- Flask REST API for predictions
-- Accepts patient data and returns readmission risk score
-- Suitable for integration with hospital systems
-
 ## 🏥 Clinical Use Case
 
 The system is designed to support clinical decision-making by:
@@ -210,15 +195,6 @@ The system is designed to support clinical decision-making by:
    - Home health visits
    - Medication reconciliation
    - Patient education programs
-
-## 📈 Future Improvements
-
-- Add feature importance analysis and model interpretability (SHAP values)
-- Implement time-series cross-validation for more robust evaluation
-- Incorporate additional data sources (e.g., social determinants of health)
-- Build a web dashboard for clinicians
-- Add model monitoring and retraining pipeline
-- Implement A/B testing framework for clinical validation
 
 ## 🛠️ Dependencies
 
