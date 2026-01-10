@@ -40,6 +40,7 @@ healthcare-readmission-ml-system/
 │   ├── train.py              # Model training script
 │   ├── evaluate.py           # Clinical threshold analysis
 │   ├── finalize_model.py     # Final model creation
+│   │__ app.py                # App with API interaction 
 └── artifacts/
 ```
 
@@ -134,6 +135,81 @@ This creates:
 - `models/final_readmission_pipeline.joblib` - Production-ready model
 - `models/clinical_threshold.json` - Clinical threshold configuration
 
+### 5. Run the API Server
+
+Start the FastAPI server for real-time predictions:
+
+```bash
+cd /Users/aishwarya/Desktop/healthcare-readmission-ml-system
+PYTHONPATH=$(pwd) uvicorn src.app:app --reload --port 3000
+```
+
+Or using the venv python directly:
+```bash
+PYTHONPATH=$(pwd) /path/to/venv/bin/uvicorn src.app:app --reload --port 3000
+```
+
+Once running, access:
+- **API Health Check**: http://127.0.0.1:3000/
+- **Interactive API Docs**: http://127.0.0.1:3000/docs
+- **Alternative Docs**: http://127.0.0.1:3000/redoc
+
+#### API Endpoints
+
+**1. Health Check - `GET /`**
+```bash
+curl http://127.0.0.1:3000/
+```
+
+Returns server status, model type, threshold, and recall target.
+
+**2. Single Patient Prediction - `POST /predict`**
+```bash
+curl -X POST "http://127.0.0.1:3000/predict" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "race": "Caucasian",
+    "gender": "Female",
+    "age": "[70-80)",
+    "admission_type_id": 1,
+    "discharge_disposition_id": 1,
+    "admission_source_id": 7,
+    "time_in_hospital": 3,
+    "payer_code": "MC",
+    "medical_specialty": "Cardiology",
+    "num_lab_procedures": 45,
+    "num_procedures": 0,
+    "num_medications": 15,
+    "number_outpatient": 0,
+    "number_emergency": 0,
+    "number_inpatient": 0,
+    "diag_1": "428",
+    "diag_2": "250",
+    "diag_3": "401",
+    "number_diagnoses": 9
+  }'
+```
+
+Returns:
+- `readmission_risk_score`: Probability of 30-day readmission (0-1)
+- `high_risk_flag`: 1 if risk exceeds threshold, 0 otherwise
+- `clinical_recommendation`: Suggested action based on risk level
+
+**3. Batch Prediction - `POST /predict-batch`**
+
+Submit multiple patients for scoring in a single request. See `/docs` for the request schema.
+
+#### Interactive API Documentation
+
+The FastAPI server provides automatic interactive documentation at `/docs`:
+
+1. Navigate to http://127.0.0.1:3000/docs
+2. Expand any endpoint to see its details
+3. Click "Try it out" to test the endpoint
+4. Fill in the request body with patient data
+5. Click "Execute" to get predictions
+6. View the response with risk scores and recommendations
+
 ## 🧪 Model Performance
 
 ### Gradient Boosting Classifier (Recommended)
@@ -183,6 +259,15 @@ This high-recall approach ensures that most patients at risk of readmission are 
 - Creates final production-ready model
 - Saves clinical threshold configuration
 - Generates deployment artifacts
+
+### `src/app.py`
+- FastAPI REST API for real-time predictions
+- Provides health check, single prediction, and batch prediction endpoints
+- Accepts patient data via JSON and returns readmission risk scores
+- Includes automatic interactive documentation (Swagger UI)
+- Designed for integration with hospital information systems
+- Returns clinical recommendations based on threshold
+- Supports both individual and batch patient scoring
 
 ## 🏥 Clinical Use Case
 
