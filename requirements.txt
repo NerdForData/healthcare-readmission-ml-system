@@ -1,5 +1,21 @@
-pandas 
-numpy 
+# Core
+numpy
+pandas
+
+# Visualization (EDA only)
 matplotlib
-scikit-learn
 seaborn
+
+# Machine Learning
+scikit-learn
+
+# Model persistence
+joblib
+
+# API
+fastapi
+uvicorn
+
+# Data validation
+pydantic
+
